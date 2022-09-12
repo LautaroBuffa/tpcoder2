@@ -56,15 +56,14 @@ const btnAgregar= document.querySelector ("#btnAgregar")
 
 function enviar (){
     alert ("Producto agregado al stock.")
-}
-btnAgregar.addEventListener("click", ()=>{
-    enviar ()
-})
-btnAgregar.addEventListener ("click", ()=>{
     agregarfilatabla ()
-})
+}
 btnAgregar.addEventListener ("click", ()=>{
     crearAuto ()
+})
+
+btnAgregar.addEventListener("click", ()=>{
+    enviar ()
 })
 
 
@@ -173,16 +172,16 @@ function agregarmarca (){
 
 // Funcion financiar
 
-/*const Financiamiento = document.getElementsByClassName ("financiar")
+const Financiamiento = document.getElementsByClassName ("financiar")
 const valorVehiculo = document.getElementsByClassName ("valorvehiculo")
 
 function financiar1 (){
  let precio = valorVehiculo
- let entrega = parsefloat (prompt ("Cuanto dinero entrega?"))
- let cuotas = parsefloat (prompt ("Ingrese cantidad de cuotas en las que desea pagar el saldo del vehiculo"))
+ let entrega = parseInt (prompt ("Cuanto dinero entrega?"))
+ let cuotas = parseInt (prompt ("Ingrese cantidad de cuotas en las que desea pagar el saldo del vehiculo"))
  let valorcuotas= ((precio-entrega)/cuotas)*0.5
  alert ("El valor de la cuota es"+ valorcuotas)
 }
 Financiamiento.addEventListener ("click", ()=>{
     financiar1 ()
-})*/
+})
