@@ -1,5 +1,79 @@
-const autos= []
-const auto = {
+class Vehiculo {
+    constructor(modelo,año,precio,km){
+    this.modelo= modelo
+    this.año=año
+    this.precio=precio
+    this.km=km
+    }
+}
+const vehiculos = []
+
+function crearAuto(){
+    
+
+let modelo = document.getElementById ("modelo").value
+let km = document.getElementById ("km").value
+let año = document.getElementById ("año").value
+let precio = document.getElementById ("precio").value
+
+let auto = new Vehiculo (modelo,año,precio,km)
+
+agregarAuto(auto)
+}
+
+function agregarAuto(auto){
+    vehiculos.push(auto)
+
+}// funcion para subir un auto a la pagina
+
+
+function agregarfilatabla () {
+    const tabla = document.getElementById ("tabla1")
+    for (let i = 0; i < vehiculos.length; i++) {
+        
+        let modelo = vehiculos[i].modelo;
+        let año = vehiculos[i].año;
+        let precio = vehiculos[i].precio;
+        let km = vehiculos[i].km;
+
+        let fila = `<tr class="tabla">
+        <td class="celda">modelo : (${modelo})</td>
+        <td class="celda">Año :  (${año})</td>
+        <td class="celda" class="valorvehiculo">Precio: (${precio})</td>
+        <td class="celda">km : (${km})</td>
+        <td class="celda"><button class="financiar">Financiamiento </button><button>Ver Producto</button> </td>
+    
+    </tr>`
+    tabla.innerHTML += fila
+        
+        
+    }
+   
+
+}
+
+const btnAgregar= document.querySelector ("#btnAgregar")
+
+function enviar (){
+    alert ("Producto agregado al stock.")
+}
+btnAgregar.addEventListener("click", ()=>{
+    enviar ()
+})
+btnAgregar.addEventListener ("click", ()=>{
+    agregarfilatabla ()
+})
+btnAgregar.addEventListener ("click", ()=>{
+    crearAuto ()
+})
+
+
+
+
+
+// Codigo para probar en la consola
+
+/*const auto = {
     modelo: "AUDI A4",
    año: 2022,
     precio: 5000000,
@@ -23,6 +97,10 @@ const auto1 = {
     precio: 1000000,
     kilometros: 200000,
  }
+
+
+//funcion calcular credito
+
  function calcularCredito (valorauto, cuotas){
     let valorCuota =  (valorauto/cuotas)*0.5
     return alert( "el  valor de la cuota es " + valorCuota)
@@ -49,7 +127,12 @@ else {
     alert ("No tenemos este vehiculo")
 }
  }
- function cargarauto (){
+*/
+
+ //funcion cargar autos a travez de prompt
+
+
+/* function cargarauto (){
    let i = parseFloat( prompt("ingrese cuantos autos quiere subir a la app"))
    let n = 0
    while (n<i) {
@@ -62,7 +145,12 @@ const auto = {
 n++
 alert ("Este es el vehiculos que ingresaste" +" " + auto.modelo +" "  + auto.año +" "  + auto.kilometros +"km"  + " " + auto.precio +"pesos" )
 }
- }
+ }*/
+
+
+ //Funcion marcas
+
+
  const marcas = ["Volkswagen","Fiat", "BMW", "Ford","Chevrolet", "Audi","jeep","Peugeot","toyota"]
 function recorrerArray () {
     for (let i=0; i<marcas.length ;i++){
@@ -74,32 +162,27 @@ function agregarmarca (){
     marcas.push (nuevamarca)
     console.table (marcas)
 }
-const titulo= document.getElementById("dejacontacto")
-const h2= document.getElementsByClassName("textosh2")
-const h1= document.getElementsByTagName("h1")
 
-//iinner permite generar un codigo html desde js 
-//inner.text escribe texto
-//inner.html escribe codigo html
-function agregarfilatabla () {
-    const tabla = document.getElementById ("tabla1")
-    let fila = `<tr class="tabla">
-    <td class="celda">Modelo</td>
-    <td class="celda">Año</td>
-    <td class="celda">Precio</td>
-    <td class="celda">km</td>
-    <td class="celda"><button>Financiamiento </button><button>Ver Producto</button> </td>
 
-</tr>`
-tabla.innerHTML += fila
+//  const inputs = document.querySelectorAll("input")
+//inputs.forEach(input () =>{
+    //alert (input.value)
+ //   input.addEventListener("focus", input.classname = "focus-en-input")
+  //  input.addEventListener("blur", input.classname = "")
+//})
 
+// Funcion financiar
+
+/*const Financiamiento = document.getElementsByClassName ("financiar")
+const valorVehiculo = document.getElementsByClassName ("valorvehiculo")
+
+function financiar1 (){
+ let precio = valorVehiculo
+ let entrega = parsefloat (prompt ("Cuanto dinero entrega?"))
+ let cuotas = parsefloat (prompt ("Ingrese cantidad de cuotas en las que desea pagar el saldo del vehiculo"))
+ let valorcuotas= ((precio-entrega)/cuotas)*0.5
+ alert ("El valor de la cuota es"+ valorcuotas)
 }
-function nuevoauto (){
-    let modelo = prompt ( "ingrese modelo"),
-    let año= parseFloat (prompt("ingrese año del vehiculo")),
-    let precio= parseFloat (prompt ("Ingrese precio")),
-    let kilometros= parsefloat (prompt("ingrese kilometros")),
-    autos.push(new autos(modelo, año, precio, kilometros  ))
- }
-
-//document.createElement ("") para crear elemento html
+Financiamiento.addEventListener ("click", ()=>{
+    financiar1 ()
+})*/
