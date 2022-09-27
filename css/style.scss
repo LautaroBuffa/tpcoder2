@@ -5,6 +5,48 @@ header{
     background-color:$colortitulos ;
     background-size: cover;
 }
+#links{
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-content: flex-end;
+}
+#linkcontacto{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-top: 10%;
+    margin-bottom: 20%;
+    margin-right: 2%;
+    flex-direction: column;
+    color: antiquewhite;
+    background-color: black;
+    background-position: 10%;
+    transition: 0s;
+    font-family: 'Courier New', Courier, monospace;
+}
+.link {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-top: 1%;
+    margin-bottom: 20%;
+    margin-right: 1%;
+    flex-direction: column;
+    color: antiquewhite;
+    background-color: black;
+    background-position: 10%;
+    transition: 0s;
+    font-family: 'Courier New', Courier, monospace;
+ }
+ .logocarrito{
+    position:absolute;
+    width: 4%;
+}
+ .link:hover{
+    background-color: aliceblue;
+    color: black;
+ }
 .titulo{
     display: flex;
     justify-content: flex-end;
@@ -15,6 +57,7 @@ header{
 }
 #logo{
     width: 40%;
+    margin-left: 2%;
     margin-top: 5%;
     margin-bottom: 5%;
 }
@@ -29,8 +72,10 @@ body{
     background-color:$colorfondo;
 }
 main{
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    margin-left: 25%;
+    margin-right: 25%;
     background-color: $colortitulos;
     background-repeat: no-repeat;
     display: flex;
@@ -123,9 +168,13 @@ footer{
 }
 #redes{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 #verproducto{
     width: 150%;
 }
- 
+.formulario{
+    width: 70%;
+    margin-left: 20%;
+    margin-right: 20%;
+}

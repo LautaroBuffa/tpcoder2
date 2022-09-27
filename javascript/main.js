@@ -7,9 +7,14 @@ class Vehiculo {
     }
 }
 const vehiculos = []
-
+function generadorautomatico () {
+    vehiculos.push (new Vehiculo ("Celta",2020,2000000,220000))
+    vehiculos.push (new Vehiculo ("Audi A4",2020,2000000,220000))
+    vehiculos.push (new Vehiculo ("BMW m4",2020,2000000,220000))
+    vehiculos.push (new Vehiculo ("Gol trend",2020,2000000,220000))
+}
+generadorautomatico ()
 function crearAuto(){
-    
 
 let modelo = document.getElementById ("modelo").value
 let km = document.getElementById ("km").value
@@ -20,7 +25,6 @@ let auto = new Vehiculo (modelo,año,precio,km)
 
 agregarAuto(auto)
 }
-
 function agregarAuto(auto){
     vehiculos.push(auto)
 
@@ -37,11 +41,11 @@ function agregarfilatabla () {
         let km = vehiculos[i].km;
 
         let fila = `<tr class="tabla">
-        <td class="celda">modelo : (${modelo})</td>
-        <td class="celda">Año :  (${año})</td>
+        <td class="celda">Modelo : ${modelo}</td>
+        <td class="celda">Año :  ${año}</td>
         <td class="celda" class="valorvehiculo">Precio: (${precio})</td>
-        <td class="celda">km : (${km})</td>
-        <td class="celda"><button class="financiar">Financiamiento </button><button>Ver Producto</button> </td>
+        <td class="celda">Km : ${km}</td>
+        <td class="celda"><button class="financiar">Financiamiento </button><button class="carrito">Agregar al Carrito</button> </td>
     
     </tr>`
     tabla.innerHTML += fila
@@ -51,24 +55,106 @@ function agregarfilatabla () {
    
 
 }
-
+agregarfilatabla ()
 const btnAgregar= document.querySelector ("#btnAgregar")
 
 function enviar (){
     alert ("Producto agregado al stock.")
-    agregarfilatabla ()
+    agregarfilatabla()
+    
 }
-btnAgregar.addEventListener ("click", ()=>{
-    crearAuto ()
-})
 
 btnAgregar.addEventListener("click", ()=>{
-    enviar ()
+    crearAuto ()})
+
+btnAgregar.addEventListener("click", ()=>{
+    enviar()
 })
 
 
+//funcion para filtrar producto ingresando parte del nombre
 
 
+const inputbuscarvh= document.getElementById ("buscar").value
+
+function filtrarproducto() {
+    inputbuscarvh.value = inputbuscarvh.value.trim().toUpperCase()
+if(inputbuscarvh.value !==""){
+
+    const resultado = vehiculos.filter ( vehiculo => vehiculo.modelo.includes(inputbuscarvh.value))
+
+    if (resultado.length === 0) {
+        console.clear()
+        alert ("No se encontro este producto")
+        agregarfilatabla (vehiculos)
+    } else {
+        agregarfilatabla (vehiculos)
+        alert("se encontro el auto ")
+    }
+}
+}
+const filtro = document.querySelector ("#filtro")
+filtro.addEventListener ("click", ()=>{
+    filtrarproducto ()
+})
+
+// Funcion para Guardar datos
+
+
+const inputnombre= document.getElementById("nombre")
+const inputapellido= document.getElementById("apellido")
+const inputnumero= document.getElementById("numero")
+const inputmail= document.getElementById("mail1")
+const guardarbtn = document.getElementById ("btnEnviar")
+
+function guardadatos () {
+    localStorage.setItem("nombre", inputnombre.value)
+    localStorage.setItem("apellido", inputapellido.value)
+    localStorage.setItem("numero", inputnumero.value)
+    localStorage.setItem("mail", inputmail.value)
+   
+  
+}
+guardarbtn.addEventListener ("click", guardadatos)
+
+function recuperardatos (){
+    inputnombre.value = localStorage.getItem ("nombre")
+    inputapellido.value = localStorage.getItem ("apellido")
+    inputnumero.value = localStorage.getItem ("numero")
+    inputmail.value = localStorage.getItem ("mail")
+}
+document.addEventListener("DOMContentLoaded", recuperardatos)
+
+//Función para guardar en el carrito
+const carrito = []
+function carrito1 () {
+    vehiculos.forEach (auto => {
+        const btncarrito = document.querySelector(`.carrito ${auto.modelo}`)
+        btncarrito.addEventListener ("click", ()=> agregarAlCarrito (`${auto.modelo}`))
+    })
+}
+carrito1 ()
+
+function agregarAlCarrito (modelo) {
+    const vehiculo = vehiculos.find (auto => auto.modelo == modelo)
+    carrito.push (vehiculo)
+    localStorage.setItem("carrito", JSON.stringify(carrito))
+}
+function recuperoCarrito () {
+    let carrito = JSON.parse(localStorage.getItem("carrito"))
+    let tabla = document.querySelector ("tbody")
+    carrito.forEach(auto=>{
+        let fila =      `<tr class="tabla">
+        <td class="celda">Modelo : ${auto.modelo}</td>
+        <td class="celda">Año :  ${auto.año}</td>
+        <td class="celda" class="valorvehiculo">Precio: (${precio})</td>
+        <td class="celda">Km : ${auto.km}</td>
+        <td class="celda"><button class="financiar">Financiamiento </button><button class="carrito">Agregar al Carrito</button> </td>
+    
+    </tr>`
+    tabla.innerHTML += fila
+    })
+}
 
 // Codigo para probar en la consola
 
@@ -162,17 +248,9 @@ function agregarmarca (){
     console.table (marcas)
 }
 
-
-//  const inputs = document.querySelectorAll("input")
-//inputs.forEach(input () =>{
-    //alert (input.value)
- //   input.addEventListener("focus", input.classname = "focus-en-input")
-  //  input.addEventListener("blur", input.classname = "")
-//})
-
 // Funcion financiar
 
-const Financiamiento = document.getElementsByClassName ("financiar")
+/*const Financiamiento = document.getElementsByClassName ("financiar")
 const valorVehiculo = document.getElementsByClassName ("valorvehiculo")
 
 function financiar1 (){
@@ -185,3 +263,4 @@ function financiar1 (){
 Financiamiento.addEventListener ("click", ()=>{
     financiar1 ()
 })
+*/
