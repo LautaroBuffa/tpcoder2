@@ -174,6 +174,7 @@ function agregarAlCarrito(event) {
         }
     }
     carrito.push( new Auto (modelo, año, precio, km))
+    alert("se ha agregado este producto al carrito, " + modelo)
     localStorage.setItem("carrito", JSON.stringify(carrito))
 }
 
