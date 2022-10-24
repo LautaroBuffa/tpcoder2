@@ -1,266 +1,265 @@
+function debounce(callback, wait) {
+    let timerId;
+    return (...args) => {
+      clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        callback(...args);
+      }, wait);
+    };
+  }
+
 class Vehiculo {
-    constructor(modelo,año,precio,km){
-    this.modelo= modelo
-    this.año=año
-    this.precio=precio
-    this.km=km
+    constructor(modelo, año, precio, km) {
+        this.modelo = modelo
+        this.año = año
+        this.precio = precio
+        this.km = km
     }
 }
+
 const vehiculos = []
-function generadorautomatico () {
-    vehiculos.push (new Vehiculo ("Celta",2020,2000000,220000))
-    vehiculos.push (new Vehiculo ("Audi A4",2020,2000000,220000))
-    vehiculos.push (new Vehiculo ("BMW m4",2020,2000000,220000))
-    vehiculos.push (new Vehiculo ("Gol trend",2020,2000000,220000))
+generadorautomatico()
+dibujarTabla()
+
+const inputbuscarvh = document.querySelector("#buscar")
+const filtro = document.getElementById("filtro")
+const btnAgregar = document.querySelector("#btnAgregar")
+
+function generadorautomatico() {
+    vehiculos.push(new Vehiculo("Celta", 2020, 2000000, 220000))
+    vehiculos.push(new Vehiculo("Audi A4", 2020, 2000000, 220000))
+    vehiculos.push(new Vehiculo("BMW m4", 2020, 2000000, 220000))
+    vehiculos.push(new Vehiculo("Gol trend", 2020, 2000000, 220000))
 }
-generadorautomatico ()
-function crearAuto(){
 
-let modelo = document.getElementById ("modelo").value
-let km = document.getElementById ("km").value
-let año = document.getElementById ("año").value
-let precio = document.getElementById ("precio").value
-
-let auto = new Vehiculo (modelo,año,precio,km)
-
-agregarAuto(auto)
+function agregarAuto(modelo, año, precio, km) {
+    vehiculos.push(new Vehiculo(modelo, año, precio, km))
+    dibujarTabla()
 }
-function agregarAuto(auto){
-    vehiculos.push(auto)
-
-}// funcion para subir un auto a la pagina
+// funcion para subir un auto a la pagina
 
 
-function agregarfilatabla () {
-    const tabla = document.getElementById ("tabla1")
-    for (let i = 0; i < vehiculos.length; i++) {
-        
-        let modelo = vehiculos[i].modelo;
-        let año = vehiculos[i].año;
-        let precio = vehiculos[i].precio;
-        let km = vehiculos[i].km;
+function dibujarTabla(filter) {
+    const tabla = document.getElementById("tabla1")
+    tabla.innerHTML = ""
+
+    let vehiculosAMostrar = vehiculos
+
+    if (filter) {
+        const vehiculosFiltrados = vehiculos.filter(vehiculo => vehiculo.modelo.toUpperCase().includes(filter.toUpperCase()))
+
+        if (vehiculosFiltrados.length) {
+            vehiculosAMostrar = vehiculosFiltrados
+            alert('se encontro algun vehiculo')
+        } else {
+            alert('No se encontraron vehiculos con ' + filter)
+        }
+    }
+
+    for (let i = 0; i < vehiculosAMostrar.length; i++) {
+        let modelo = vehiculosAMostrar[i].modelo;
+        let año = vehiculosAMostrar[i].año;
+        let precio = vehiculosAMostrar[i].precio;
+        let km = vehiculosAMostrar[i].km;
 
         let fila = `<tr class="tabla">
-        <td class="celda">Modelo : ${modelo}</td>
-        <td class="celda">Año :  ${año}</td>
-        <td class="celda" class="valorvehiculo">Precio: (${precio})</td>
-        <td class="celda">Km : ${km}</td>
-        <td class="celda"><button class="financiar">Financiamiento </button><button class="carrito">Agregar al Carrito</button> </td>
-    
-    </tr>`
-    tabla.innerHTML += fila
+            <td class="celda">Modelo : ${modelo}</td>
+            <td class="celda">Año :  ${año}</td>
+            <td class="celda" class="valorvehiculo">Precio: (${precio})</td>
+            <td class="celda">Km : ${km}</td>
+            <td class="celda">
+                <button class="financiar" data-precio="${precio}">Financiamiento </button>
+                <button class="carrito" data-modelo="${modelo}" data-año="${año}" data-precio="${precio}" data-km="${km}">Agregar al Carrito</button>
+            </td>
         
-        
+        </tr>`
+        tabla.innerHTML += fila
     }
-   
-
-}
-agregarfilatabla ()
-const btnAgregar= document.querySelector ("#btnAgregar")
-
-function enviar (){
-    alert ("Producto agregado al stock.")
-    agregarfilatabla()
-    
 }
 
-btnAgregar.addEventListener("click", ()=>{
-    crearAuto ()})
 
-btnAgregar.addEventListener("click", ()=>{
-    enviar()
-})
+// funcion boton de agregar
+function Agregar() {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+        title: 'Estas Seguro??',
+        text: "No vas a poder revertir esta acción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Cargar Producto!',
+        cancelButtonText: 'No, cancelar!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            swalWithBootstrapButtons.fire(
+                'Producto Cargado!',
+                'Tu producto fue Agregado al Stock.',
+                'success',
+                (() => {
+                    const modelo = document.getElementById("modelo").value
+                    const km = document.getElementById("km").value
+                    const año = document.getElementById("año").value
+                    const precio = document.getElementById("precio").value
+
+                    agregarAuto(modelo, año, precio, km)
+                })()
+            )
+        } else if (
+
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+                'Cancelar',
+                'Tu producto no se ha Agregado al stock',
+                'error'
+            )
+        }
+    })
+}
 
 
-//funcion para filtrar producto ingresando parte del nombre
-
-
-const inputbuscarvh= document.getElementById ("buscar").value
+btnAgregar.addEventListener("click", Agregar)
+inputbuscarvh.addEventListener('input', debounce(filtrarproducto, 1000))
 
 function filtrarproducto() {
-    inputbuscarvh.value = inputbuscarvh.value.trim().toUpperCase()
-if(inputbuscarvh.value !==""){
 
-    const resultado = vehiculos.filter ( vehiculo => vehiculo.modelo.includes(inputbuscarvh.value))
+    let inputnombre = inputbuscarvh.value.trim()
 
-    if (resultado.length === 0) {
-        console.clear()
-        alert ("No se encontro este producto")
-        agregarfilatabla (vehiculos)
+    if (inputnombre) {
+
+        dibujarTabla(inputnombre)
+
+        if (resultado.length == 0) {
+            console.clear()
+            alert("No se encontro este producto" + inputnombre)
+        } else { 
+            alert("se encontro el auto ")
+        }
     } else {
-        agregarfilatabla (vehiculos)
-        alert("se encontro el auto ")
+        dibujarTabla()
     }
 }
-}
-const filtro = document.querySelector ("#filtro")
-filtro.addEventListener ("click", ()=>{
-    filtrarproducto ()
-})
-
-// Funcion para Guardar datos
-
-
-const inputnombre= document.getElementById("nombre")
-const inputapellido= document.getElementById("apellido")
-const inputnumero= document.getElementById("numero")
-const inputmail= document.getElementById("mail1")
-const guardarbtn = document.getElementById ("btnEnviar")
-
-function guardadatos () {
-    localStorage.setItem("nombre", inputnombre.value)
-    localStorage.setItem("apellido", inputapellido.value)
-    localStorage.setItem("numero", inputnumero.value)
-    localStorage.setItem("mail", inputmail.value)
-   
-  
-}
-guardarbtn.addEventListener ("click", guardadatos)
-
-function recuperardatos (){
-    inputnombre.value = localStorage.getItem ("nombre")
-    inputapellido.value = localStorage.getItem ("apellido")
-    inputnumero.value = localStorage.getItem ("numero")
-    inputmail.value = localStorage.getItem ("mail")
-}
-document.addEventListener("DOMContentLoaded", recuperardatos)
 
 //Función para guardar en el carrito
-const carrito = []
-function carrito1 () {
-    vehiculos.forEach (auto => {
-        const btncarrito = document.querySelector(`.carrito ${auto.modelo}`)
-        btncarrito.addEventListener ("click", ()=> agregarAlCarrito (`${auto.modelo}`))
-    })
+const btncarrito = document.getElementsByClassName("carrito");
+for (let i = 0; i < btncarrito.length; i++) {
+    btncarrito[i].addEventListener("click", agregarAlCarrito)
 }
-carrito1 ()
 
-function agregarAlCarrito (modelo) {
-    const vehiculo = vehiculos.find (auto => auto.modelo == modelo)
-    carrito.push (vehiculo)
+let carrito = []
+
+
+function agregarAlCarrito(event) {
+    if (localStorage.getItem("carrito")){
+        carrito = JSON.parse(localStorage.getItem("carrito"))
+    }
+    
+    const modelo= event.target.getAttribute("data-modelo")
+    const año= event.target.getAttribute("data-año")
+    const precio= event.target.getAttribute("data-precio")
+    const km= event.target.getAttribute("data-km")
+    class Auto {
+        constructor(modelo, año, precio, km) {
+            this.modelo = modelo
+            this.año = año
+            this.precio = precio
+            this.km = km
+        }
+    }
+    carrito.push( new Auto (modelo, año, precio, km))
     localStorage.setItem("carrito", JSON.stringify(carrito))
 }
-function recuperoCarrito () {
-    let carrito = JSON.parse(localStorage.getItem("carrito"))
-    let tabla = document.querySelector ("tbody")
-    carrito.forEach(auto=>{
-        let fila =      `<tr class="tabla">
-        <td class="celda">Modelo : ${auto.modelo}</td>
-        <td class="celda">Año :  ${auto.año}</td>
-        <td class="celda" class="valorvehiculo">Precio: (${precio})</td>
-        <td class="celda">Km : ${auto.km}</td>
-        <td class="celda"><button class="financiar">Financiamiento </button><button class="carrito">Agregar al Carrito</button> </td>
-    
-    </tr>`
-    tabla.innerHTML += fila
-    })
+
+
+
+
+//Funcion marcas
+
+
+const marcas = ["Volkswagen", "Fiat", "BMW", "Ford", "Chevrolet", "Audi", "jeep", "Peugeot", "toyota"]
+
+function recorrerArray() {
+    for (let i = 0; i < marcas.length; i++) {
+        console.log(marcas[i])
+    }
 }
 
-// Codigo para probar en la consola
+function agregarmarca() {
+    let nuevamarca = prompt("ingresa nueva marca")
+    marcas.push(nuevamarca)
+    console.table(marcas)
+} 
 
-/*const auto = {
-    modelo: "AUDI A4",
-   año: 2022,
-    precio: 5000000,
-    kilometros: 0,
- }
-const auto1 = {
-    modelo: "AUDI A4",
-   año: 2022,
-    precio: 5000000,
-    kilometros: 0,
- }
- const auto2 = {
-    modelo: "gol trend",
-   año: 2014,
-    precio: 1500000,
-    kilometros: 150000,
- }
- const auto3 = {
-    modelo: "ford ka",
-   año: 2010,
-    precio: 1000000,
-    kilometros: 200000,
- }
+//funcion fetch (no la pude hacer funcionar)
+/*const contenedor = document.getElementsByClassName("contenedor")
+const url= "javascript/autos.json"
+let autos= []
+let contenidohtml= ""
+const mostrarcard = (contenido)=>{
+    const {foto, titulo, texto} = contenido
+    return  `  <div class="card" style="width: 18rem;">
+            <img src="${foto}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">${titulo}</h5>
+              <p class="card-text">${texto}</p>
+          </div>`
+} 
+const mostrarerror= ()=>{
+    return  `  <div class="card" style="width: 18rem;">
+    <img src="" class="card-img-top" alt="no se pudo cargar">
+    <div class="card-body">
+      <h5 class="card-title">ningun auto cargado</h5>
+  </div>`
+} 
 
-
-//funcion calcular credito
-
- function calcularCredito (valorauto, cuotas){
-    let valorCuota =  (valorauto/cuotas)*0.5
-    return alert( "el  valor de la cuota es " + valorCuota)
- }
- 
- function calculocredito (){
-    let vehiculo = prompt ("ingrese el vehiculo")
-    if (vehiculo == auto1.modelo){
-        alert ("Tus opciones de cuotas son, 12, 24 o 48")
-        let cuotas = parseFloat (prompt("ingrese la cantidad de cuotas en la que desea abonar"))
-        return alert ("El valor de tus cuotas es $ " + auto1.precio/cuotas*0.5)
+const cargarcontenido=async () =>{
+    fetch(url)
+    .then(response=> response.json())
+    .then(data=> autos = data)
+    .then(autos=autos.forEach(vehiculo=> contenidohtml += mostrarcard(vehiculo)))
+    .catch(error=> {
+        console.error ("se ha producido un error", error)
+    contenidohtml+= mostrarerror()    })
+    .finally(()=> contenedor.innerHTML=contenidohtml)
 }
-    else if (vehiculo == auto2.modelo){
-        alert ("Tus opciones de cuotas son, 6, 12 o 24")
-        let cuotas = parseFloat (prompt("ingrese la cantidad de cuotas en la que desea abonar"))
-        return alert ("El valor de tus cuotas es $ " + auto2.precio/cuotas*0.5)
+
+/*const cargarjson = async ()=>{
+    try{
+    const response = await fetch (url)
+    const data= await response.json()
+    data=autos
+    autos.foreach(vehiculo=>
+        contenidohtml+= mostrarcard(vehiculo)
+    );
 }
-else if (vehiculo == auto3.modelo){
-      (alert ("Tus opciones de cuotas son, 3, 6 o 12"))
-      let cuotas = parseFloat (prompt("ingrese la cantidad de cuotas en la que desea abonar"))
-      return alert ("El valor de tus cuotas es $ " + auto3.precio/cuotas*0.5)
+catch (error){
+contenidohtml.innerHTML = mostrarerror()
 }
-else {
-    alert ("No tenemos este vehiculo")
-}
- }
-*/
-
- //funcion cargar autos a travez de prompt
-
-
-/* function cargarauto (){
-   let i = parseFloat( prompt("ingrese cuantos autos quiere subir a la app"))
-   let n = 0
-   while (n<i) {
-const auto = {
-    modelo: prompt ( "ingrese modelo"),
-   año: parseFloat (prompt("ingrese año del vehiculo")),
-    precio: parseFloat (prompt ("ingrese precio")),
-    kilometros: parseFloat (prompt("ingrese kilometros")),
-}
-n++
-alert ("Este es el vehiculos que ingresaste" +" " + auto.modelo +" "  + auto.año +" "  + auto.kilometros +"km"  + " " + auto.precio +"pesos" )
-}
- }*/
-
-
- //Funcion marcas
-
-
- const marcas = ["Volkswagen","Fiat", "BMW", "Ford","Chevrolet", "Audi","jeep","Peugeot","toyota"]
-function recorrerArray () {
-    for (let i=0; i<marcas.length ;i++){
-    console.log (marcas[i])
+finally{
+contenedor.innerHTML = contenidohtml
 }
 }
-function agregarmarca (){
-    let nuevamarca = prompt ("ingresa nueva marca")
-    marcas.push (nuevamarca)
-    console.table (marcas)
-}
+cargarjson()*/
+
 
 // Funcion financiar
 
-/*const Financiamiento = document.getElementsByClassName ("financiar")
-const valorVehiculo = document.getElementsByClassName ("valorvehiculo")
-
-function financiar1 (){
- let precio = valorVehiculo
+function financiar(event) {
+const precio= event.target.getAttribute("data-precio")
  let entrega = parseInt (prompt ("Cuanto dinero entrega?"))
  let cuotas = parseInt (prompt ("Ingrese cantidad de cuotas en las que desea pagar el saldo del vehiculo"))
- let valorcuotas= ((precio-entrega)/cuotas)*0.5
- alert ("El valor de la cuota es"+ valorcuotas)
+ let valorcuotas= ((precio-entrega)/cuotas)*2
+ alert ("El valor de la cuota es $"+ valorcuotas)
 }
-Financiamiento.addEventListener ("click", ()=>{
-    financiar1 ()
-})
-*/
+
+const financiamiento = document.getElementsByClassName("financiar");
+for (let i = 0; i < financiamiento.length; i++) {
+    financiamiento[i].addEventListener("click", financiar)
+}
